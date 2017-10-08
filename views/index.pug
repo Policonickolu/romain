@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  h1= 'Arabic to Roman Numerals'
+
+  div.well
+    form(method='POST' action='')
+      div.form-group
+        label(for='arabic_numerals') Arabic Numerals : 
+        input#arabic_numerals.form-control(value=arabic_numerals,type='date', name='arabic_numerals')
+      
+      div#errors.form-group
+        if errors 
+          ul
+            for error in errors
+              li!= error.msg
+
+      div.form-group
+        button#convert.btn.btn-primary Convert
+
+      div.form-group
+        label(for='roman_numerals') Roman Numerals :
+        input#roman_numerals.form-control(value=roman_numerals,type='date', name='roman_numerals')

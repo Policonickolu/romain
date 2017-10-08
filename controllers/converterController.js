@@ -1,22 +1,33 @@
 var converter = require('../helpers/converter');
 
+// Get converter form
+exports.index = function(req, res) {
+  res.sseSetup();
+  res.sseSend("");
+};
+
 // Get converter form 
 exports.convert = function(req, res) {
-  console.log("yo");
-  req.checkBody('arabic_numerals', 'Nécessite un nombre entier entre 1 et 100')
-      .notEmpty().isInt( {gt: 0, lt: 101} );
 
-  req.sanitize('arabic_numerals').trim();
-  req.sanitize('arabic_numerals').escape();
+  var roman = "";
 
-  var errors = req.validationErrors();
+  if(req.params.arabic){
+    req.checkParams('arabic', 'Nécessite un nombre entier entre 1 et 100')
+        .notEmpty().isInt( {gt: 0, lt: 101} );
 
-  var roman = converter.arabic_to_roman(req.body.arabic_numerals);
+    req.sanitize('arabic').trim();
+    req.sanitize('arabic').escape();
 
-  if(errors) {
-    res.render('index', { arabic_numerals: req.body.arabic_numerals, errors: errors });
-  } else {  
-    res.render('index', { arabic_numerals: req.body.arabic_numerals, roman_numerals: roman});
+    var errors = req.validationErrors();
+
+    roman = converter.arabic_to_roman(req.params.arabic);
   }
-  
+
+  res.sseSetup();
+  if(errors) {
+    res.sseSend({ errors: errors });
+  } else {  
+    res.sseSend({ success: roman });
+  }
+
 };

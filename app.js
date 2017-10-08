@@ -11,6 +11,7 @@ var users = require('./routes/users');
 var converter = require('./routes/converter');
 
 var app = express();
+var sse = require('./sse');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -25,6 +26,8 @@ app.use(expressValidator());
 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(sse);
 
 app.use('/', index);
 app.use('/users', users);
